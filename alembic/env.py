@@ -9,12 +9,12 @@ from app.core.config import settings
 from app.db.base import Base
 from app.db.models import User, Todo
 
-# this is the Alembic Config object, which provides
-# access to the values within the .ini file in use.
+# C'est l'objet de configuration Alembic, qui fournit
+# l'accès aux valeurs définies dans le fichier .ini utilisé.
 config = context.config
 
-# Interpret the config file for Python logging.
-# This line sets up loggers basically.
+# Lecture du fichier de configuration pour le logging Python.
+# Cette ligne configure les loggers.
 fileConfig(config.config_file_name)
 
 config.set_main_option("sqlalchemy.url", settings.SQLALCHEMY_DATABASE_URI)

@@ -45,7 +45,7 @@ class FakeRepo:
         del self.todos[todo.id]
 
 
-@pytest.mark.asyncio
+@pytest.mark.anyio
 async def test_todo_lifecycle():
     repo = FakeRepo()
     todos = await get_todos(repo, 1)

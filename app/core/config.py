@@ -1,29 +1,31 @@
 from pathlib import Path
-from pydantic import Field
+from pydantic import ConfigDict
 from pydantic_settings import BaseSettings
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 class Settings(BaseSettings):
+    model_config = ConfigDict(
+        env_file=BASE_DIR / ".." / ".env",
+        env_file_encoding="utf-8",
+        extra="ignore",
+    )
+
     # --- Informations de connexion PostgreSQL (obligatoires) ---
-    POSTGRES_USER: str = Field(..., env="POSTGRES_USER")
-    POSTGRES_PASSWORD: str = Field(..., env="POSTGRES_PASSWORD")
-    POSTGRES_DB: str = Field(..., env="POSTGRES_DB")
-    POSTGRES_HOST: str = Field(..., env="POSTGRES_HOST")
-    POSTGRES_PORT: int = Field(..., env="POSTGRES_PORT")
+    POSTGRES_USER: str
+    POSTGRES_PASSWORD: str
+    POSTGRES_DB: str
+    POSTGRES_HOST: str
+    POSTGRES_PORT: int
 
     # URI de connexion SQLAlchemy. Peut être défini directement via .env,
     # sinon construit à partir des variables Postgres ci-dessus.
     SQLALCHEMY_DATABASE_URI: str | None = None
 
     # --- JWT / sécurité ---
-    SECRET_KEY: str = Field(..., env="SECRET_KEY")
-    ALGORITHM: str = Field("HS256", env="ALGORITHM")
-    ACCESS_TOKEN_EXPIRE_MINUTES: int = Field(30, env="ACCESS_TOKEN_EXPIRE_MINUTES")
-
-    class Config:
-        env_file = BASE_DIR / ".." / ".env"
-        env_file_encoding = "utf-8"
+    SECRET_KEY: str
+    ALGORITHM: str = "HS256"
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
 
     def __init__(self, **data):
         # On construit toujours avec pydantic-settings, puis on complète si besoin.
